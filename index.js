@@ -3,6 +3,8 @@ const express = require('express'),
 
 const app = express();
 
+const port = 8080;
+
 // Placeholder movie information
 let topMovies = [
     {
@@ -41,4 +43,8 @@ app.get('/movies', (req, res) => {
 app.use((err, req, res, next) => {
     console.error(err.stack);
     res.status(500).send('Something isn\'t working right!');
+});
+
+app.listen(port, () => {
+    console.log('Listening on port ${port}');
 });
