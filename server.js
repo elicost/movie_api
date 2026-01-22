@@ -13,6 +13,12 @@ http.createServer((request, response) => {
         filePath = 'index.html';
     }
 
+    fs.readFile(filePath, (err, data) => {
+        if (err) {
+            throw err;
+        }
+    })
+
     response.writeHead(200, {'Content-Type': 'text/plain'});
     response.end('Hello, Node!\n');
 }).listen(3000);
