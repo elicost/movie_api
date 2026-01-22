@@ -17,10 +17,12 @@ http.createServer((request, response) => {
         if (err) {
             throw err;
         }
-    })
 
-    response.writeHead(200, {'Content-Type': 'text/plain'});
-    response.end('Hello, Node!\n');
+        response.writeHead(200, {'Content-Type': 'text/plain'});
+        response.write(data);
+        response.end();
+    });
+
 }).listen(3000);
 
-console.log('My first Node test server is running on Port 3000.');
+console.log('My test server is running on Port 3000.');
