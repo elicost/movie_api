@@ -54,6 +54,22 @@ let topMovies = [
     {
         title: 'Casino',
         director: 'Martin Scorcese'
+    },
+    {
+        title: 'Perfect Blue',
+        director: 'Satoshi Kon'
+    },
+    {
+        title: 'Mulholland Drive',
+        director: 'David Lynch'
+    },
+    {
+        title: 'High and Low',
+        director: 'Akira Kurosawa'
+    },
+    {
+        title: 'Children of Men',
+        director: 'Alfonso Cuarón'
     }
 ];
 
