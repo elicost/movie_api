@@ -18,9 +18,43 @@ let topMovies = [
     {
         title: 'Prisoners',
         director: 'Denis Villeneuve'
+    },
+    {
+        title: 'Superbad',
+        director: 'Greg Mottola'
+    },
+    {
+        title: 'The Holdovers',
+        director: 'Alexander Payne'
+    },
+    {
+        title: 'Thief',
+        director: 'Michael Mann'
+    },
+    {
+        title: 'No Country for Old Men',
+        director: 'Joel and Ethan Coen'
+    },
+    {
+        title: 'The Seventh Seal',
+        director: 'Ingmar Bergman'
+    },
+    {
+        title: 'Hereditary',
+        director: 'Ari Aster'
+    },
+    {
+        title: 'Paris, Texas',
+        director: 'Wim Wenders'
+    },
+    {
+        title: 'Sorry to Bother You',
+        director: 'Boots Riley'
+    },
+    {
+        title: 'Casino',
+        director: 'Martin Scorcese'
     }
-
-    // Up to ten movies here
 ];
 
 // Invoke Morgan logger
