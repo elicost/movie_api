@@ -7,6 +7,14 @@ http.createServer((request, response) => {
     q = new URL(addr, 'htt://' + request.headers.host),
     filePath = '';
 
+    fs.appendFile('log.txt', 'URL: ' + addr + '\nTimestamp: ' + new Date() + '\n\n', (err) => {
+        if (err) {
+            console.log(err);
+        } else {
+            console.log('Added to log.');
+        }
+    });
+
     if (q.pathname.includes('documentation')) {
         filePath = (__dirname + '/documenatation.html');
     } else {
