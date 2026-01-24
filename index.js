@@ -92,24 +92,17 @@ let topMovies = [
     }
 ];
 
-// Invoke Morgan logger
-app.use(morgan('common'));
-
-// Parse JSON request bodies with Body-Parser
-app.use(bodyParser.json());
-
-// Serve `documentation.html` from public folder
-app.use(express.static('public'));
+// MIDDLEWARE
+app.use(morgan('common')); // Invoke Morgan logger
+app.use(bodyParser.json()); // Parse JSON request bodies
+app.use(express.static('public')); // Serve `documentation.html` from public folder
 
 // GET route for default text response
 app.get('/', (req, res) => {
     res.send('Welcome to my Movie API!');
 });
 
-// GET route for returning JSON object
-app.get('/movies', (req, res) => {
-    res.json(topMovies);
-});
+
 
 // Error handling function
 app.use((err, req, res, next) => {
