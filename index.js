@@ -95,6 +95,9 @@ let topMovies = [
 // Invoke Morgan logger
 app.use(morgan('common'));
 
+// Parse JSON request bodies with Body-Parser
+app.use(bodyParser.json());
+
 // Serve `documentation.html` from public folder
 app.use(express.static('public'));
 
