@@ -7,6 +7,23 @@ const app = express();
 
 const port = 8080;
 
+let users = [
+    {
+        id: 1,
+        name: "Meredith",
+        favoriteMovies: [
+            "Deep Blue Sea",
+            "Sweet Home Alabama",
+            "How the Grinch Stole Christmas"
+        ]
+    },
+    {
+        id: 2,
+        name: "Eli",
+        favoriteMovies: []
+    }
+];
+
 // Placeholder movie information
 let topMovies = [
     {
