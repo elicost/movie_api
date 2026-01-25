@@ -11,16 +11,16 @@ let users = [
     {
         id: 1,
         name: "Meredith",
-        favoriteMovies: [
-            "Deep Blue Sea",
-            "Sweet Home Alabama",
-            "How the Grinch Stole Christmas"
-        ]
+        favoriteMovies: []
     },
     {
         id: 2,
         name: "Eli",
-        favoriteMovies: []
+        favoriteMovies: [
+            "Superbad",
+            "Paris, Texas",
+            "Thief"
+        ]
     }
 ];
 
