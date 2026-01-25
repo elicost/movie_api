@@ -11,5 +11,91 @@
 <body>
     <h1>Movie API</h1>
     <p>This document will be updated through the course of this project.</p>
+    <table>
+	<thead>
+		<tr>
+			<th>REQUEST</th>
+			<th>URL/PATH</th>
+			<th>HTTP METHOD</th>
+			<th>REQUEST BODY FORMAT</th>
+			<th>REQUEST BODY EXAMPLE</th>
+			<th>RESPONSE BODY FORMAT</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>Return list of all movies</td>
+			<td>/movies</td>
+			<td>GET</td>
+			<td>N/A</td>
+			<td>N/A</td>
+			<td>JSON object</td>
+		</tr>
+		<tr>
+			<td>Return data about a single movie by title</td>
+			<td>/movies/[title]</td>
+			<td>GET</td>
+			<td>N/A</td>
+			<td>N/A</td>
+			<td>JSON object</td>
+		</tr>
+		<tr>
+			<td>Return data about a genre by title</td>
+			<td>/movies/[genre.name]</td>
+			<td>GET</td>
+			<td>N/A</td>
+			<td>N/A</td>
+			<td>JSON object</td>
+		</tr>
+		<tr>
+			<td>Return data about a director by name</td>
+			<td>/movies/[director.name]</td>
+			<td>GET</td>
+			<td>N/A</td>
+			<td>N/A</td>
+			<td>JSON object</td>
+		</tr>
+		<tr>
+			<td>Allow new users to register</td>
+			<td>/users</td>
+			<td>POST</td>
+			<td>JSON object</td>
+			<td><code>{ "name": Dan Smith, "email": "dansmith@gmail.com", "id": {uuid.v4} }</code></td>
+			<td>JSON object</td>
+		</tr>
+		<tr>
+			<td>Allow a user to update their username</td>
+			<td>/users/[name]</td>
+			<td>PUT</td>
+			<td>N/A</td>
+			<td>N/A</td>
+			<td>text</td>
+		</tr>
+		<tr>
+			<td>Allow user to add movie to their favorites list</td>
+			<td>/users/[favoriteMovies]</td>
+			<td>POST</td>
+			<td>JSON object</td>
+			<td><code>{ "title": "Taxi Driver", "director": "Martin Scorcese", "genre": "Drama", "description": "A mentally unstable veteran works as a nighttime taxi driver in New York City, where the perceived decadence and sleaze fuels his urge for violent action." }</code></td>
+			<td>text</td>
+		</tr>
+		<tr>
+			<td>Allow user to remove movie from their favorites list</td>
+			<td>/users/[favoriteMovies]</td>
+			<td>DELETE</td>
+			<td>JSON object</td>
+			<td><code>{ "title": "Avatar", "director": "James Cameron", "genre": "Fantasy", "description": "A paraplegic Marine dispatched to the moon Pandora on a unique mission becomes torn between following his orders and protecting the world he feels is his home." }</code></td>
+			<td>text</td>
+		</tr>
+		<tr>
+			<td>Allow existing users to deregister</td>
+			<td>/users</td>
+			<td>DELETE</td>
+			<td>JSON object</td>
+			<td><code>{ "name": James Kirk, "email": "captainkirk@starfleet.org", "id": {uuid.v4} }</code></td>
+			<td>text</td>
+		</tr>
+	</tbody>
+    </table>
 </body>
 </html>
