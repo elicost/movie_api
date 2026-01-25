@@ -33,15 +33,15 @@
 		</tr>
 		<tr>
 			<td>Return data about a single movie by title</td>
-			<td>/movies/[title]</td>
+			<td>/movies/:title</td>
 			<td>GET</td>
 			<td>N/A</td>
 			<td>N/A</td>
 			<td>JSON object</td>
 		</tr>
 		<tr>
-			<td>Return data about a genre by title</td>
-			<td>/movies/[genre.name]</td>
+			<td>Return data about a genre by name</td>
+			<td>/movies/genre/:genreName</td>
 			<td>GET</td>
 			<td>N/A</td>
 			<td>N/A</td>
@@ -49,7 +49,7 @@
 		</tr>
 		<tr>
 			<td>Return data about a director by name</td>
-			<td>/movies/[director.name]</td>
+			<td>/movies/director/:directorName</td>
 			<td>GET</td>
 			<td>N/A</td>
 			<td>N/A</td>
@@ -65,7 +65,7 @@
 		</tr>
 		<tr>
 			<td>Allow a user to update their username</td>
-			<td>/users/[name]</td>
+			<td>/users/:id</td>
 			<td>PUT</td>
 			<td>N/A</td>
 			<td>N/A</td>
@@ -73,7 +73,7 @@
 		</tr>
 		<tr>
 			<td>Allow user to add movie to their favorites list</td>
-			<td>/users/[favoriteMovies]</td>
+			<td>/users/:id/:movieTitle</td>
 			<td>POST</td>
 			<td>JSON object</td>
 			<td><code>{ "title": "Taxi Driver", "director": "Martin Scorcese", "genre": "Drama", "description": "A mentally unstable veteran works as a nighttime taxi driver in New York City, where the perceived decadence and sleaze fuels his urge for violent action." }</code></td>
@@ -81,7 +81,7 @@
 		</tr>
 		<tr>
 			<td>Allow user to remove movie from their favorites list</td>
-			<td>/users/[favoriteMovies]</td>
+			<td>/users/:id/:movieTitle</td>
 			<td>DELETE</td>
 			<td>JSON object</td>
 			<td><code>{ "title": "Avatar", "director": "James Cameron", "genre": "Fantasy", "description": "A paraplegic Marine dispatched to the moon Pandora on a unique mission becomes torn between following his orders and protecting the world he feels is his home." }</code></td>
@@ -89,7 +89,7 @@
 		</tr>
 		<tr>
 			<td>Allow existing users to deregister</td>
-			<td>/users</td>
+			<td>/users/:id</td>
 			<td>DELETE</td>
 			<td>JSON object</td>
 			<td><code>{ "name": James Kirk, "email": "captainkirk@starfleet.org", "id": {uuid.v4} }</code></td>
