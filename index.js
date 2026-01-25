@@ -25,7 +25,7 @@ let users = [
 ];
 
 // Placeholder movie information
-let topMovies = [
+let movies = [
     {
         title: "The Fall",
         description: "In 1920s Los Angeles, a bedridden patient in a hospital captivates a young girl with a fantastic tale of heroes, myths, and villains on a desert island.",
