@@ -1,6 +1,6 @@
 const express = require('express'),
     morgan = require('morgan'),
-    bodyParser = require('body-parser'),
+    // bodyParser = require('body-parser'),
     uuid = require('uuid'),
     mongoose = require('mongoose'),
     Models = require('./models.js');
@@ -14,6 +14,9 @@ mongoose.connect('mongodb://localhost:27017/cfDB', {
 });
 
 const app = express();
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true}));
 
 const port = 8080;
 
@@ -190,7 +193,7 @@ let movies = [
 
 // MIDDLEWARE
 app.use(morgan('common')); // Invoke Morgan logger
-app.use(bodyParser.json()); // Parse JSON request bodies
+// app.use(bodyParser.json()); // Parse JSON request bodies
 app.use(express.static('public')); // Serve `documentation.html` from public folder
 
 // GET route for default text response
