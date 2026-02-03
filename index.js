@@ -401,9 +401,9 @@ app.put('/users/:Username', async (req, res) => {
 
 // Allow user to add movie to favorites list (Mongoose POST route)
 app.post('/users/:Username/movies/:MovieID', async (req, res) => {
-    const movie = await Movies.findOne({ Title: req.params.MovieID });
+    const movie = await Movies.findById(req.params.MovieID);
     if (!movie) {
-        res.status(404).send('Movie not found.');
+        return res.status(404).send('Movie not found.');
     }
     await Users.findOneAndUpdate(
         { Username: req.params.Username },
