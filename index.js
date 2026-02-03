@@ -199,10 +199,23 @@ app.get('/', (req, res) => {
     res.send('Welcome to my Movie API!');
 });
 
-// GET route for returning list of all movies
-app.get('/movies', (req, res) => {
-    res.status(200).json(movies);
+// Return list of all movies (Mongoose GET route)
+app.get('/movies', async (req, res) => {
+    await Movies.find()
+        .then((movies) => {
+            res.status(201).json(movies);
+        })
+        .catch((error) => {
+            console.error(error);
+            res.status(500).send('Error: ' + error);
+        });
 });
+
+
+// Old non-Mongoose GET route for returning list of all movies
+// app.get('/movies', (req, res) => {
+//     res.status(200).json(movies);
+// });
 
 // GET route for returning information about single movie by title
 app.get('/movies/:title', (req, res) => {
