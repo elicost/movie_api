@@ -221,12 +221,16 @@ app.get('/movies', async (req, res) => {
 app.get('/movies/:Title', async (req, res) => {
     await Movies.findOne({ Title: req.params.Title })
         .then((movie) => {
-            res.json(movie);
-        })
+            if (movie) {
+                res.json(movie);
+            } else {
+                res.status(404).send('Movie not found.');
+            }
+            })
         .catch((error) => {
-            console.error(error);
-            res.status(500).send('Error: ' + error)
-        });
+        console.error(error);
+        res.status(500).send('Error: ' + error)
+    });
 });
 
 // Old non-Mongoose GET route for returning information about single movie by title
