@@ -217,17 +217,29 @@ app.get('/movies', async (req, res) => {
 //     res.status(200).json(movies);
 // });
 
-// GET route for returning information about single movie by title
-app.get('/movies/:title', (req, res) => {
-    const { title } = req.params;
-    const movie = movies.find( movie => movie.title === title );
-
-    if (movie) {
-        res.status(200).json(movie);
-    } else {
-        res.status(400).send('Movie not found.')
-    }
+// Return information about single movie by title (Mongoose GET route)
+app.get('/movies/:Title', async (req, res) => {
+    await Movies.findOne({ Title: req.params.Title })
+        .then((movie) => {
+            res.json(movie);
+        })
+        .catch((error) => {
+            console.error(error);
+            res.status(500).send('Error: ' + error)
+        });
 });
+
+// Old non-Mongoose GET route for returning information about single movie by title
+// app.get('/movies/:title', (req, res) => {
+//     const { title } = req.params;
+//     const movie = movies.find( movie => movie.title === title );
+
+//     if (movie) {
+//         res.status(200).json(movie);
+//     } else {
+//         res.status(400).send('Movie not found.')
+//     }
+// });
 
 // GET route for returning information about single genre by name
 app.get('/movies/genre/:genreName', (req, res) => {
