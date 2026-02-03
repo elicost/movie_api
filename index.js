@@ -437,33 +437,73 @@ app.post('/users/:Username/movies/:MovieID', async (req, res) => {
 //     }
 // });
 
-// DELETE route for allowing user to delete movie from favorites list
-app.delete('/users/:id/:movieTitle', (req, res) => {
-    const { id, movieTitle } = req.params;
-
-    let user = users.find( user => user.id == id );
-
-    if (user) {
-        user.favoriteMovies = user.favoriteMovies.filter( title => title !== movieTitle )
-        res.status(200).send(`${movieTitle} has been removed from ${id}'s array.`);
-    } else {
-        res.status(400).send('User or movie not found.')
+// Allow users to remove movie from list of favorites (Mongoose DELETE route)
+app.delete('/users/:Username/movies/:MovieID', async (req, res) => {
+    const movie = await Movies.findById(req.params.MovieID);
+    if (!movie) {
+        return res.status(404).send('Movie not found.');
     }
+    await Users.findOneAndUpdate(
+        { Username: req.params.Username },
+        { $pull: { FavoriteMovies: req.params.MovieID }},
+        { new: true }
+    )
+    .then((updatedUser) => {
+        if (updatedUser) {
+            res.json(updatedUser);
+        } else {
+            res.status(404).send('Username not found.');
+        }
+    })
+    .catch((error) => {
+        console.error(error);
+        res.status(500).send('Error: ' + error)
+    })
 });
 
-// DELETE route for allowing existing user to deregister
-app.delete('/users/:id', (req, res) => {
-    const { id } = req.params;
+// Old non-Mongoose DELETE route for allowing user to delete movie from favorites list
+// app.delete('/users/:id/:movieTitle', (req, res) => {
+//     const { id, movieTitle } = req.params;
 
-    let user = users.find( user => user.id == id );
+//     let user = users.find( user => user.id == id );
 
-    if (user) {
-        users = users.filter( user => user.id != id )
-        res.status(200).send(`User ${id}'s has been deleted.`);
-    } else {
-        res.status(400).send('User not found.')
-    }
+//     if (user) {
+//         user.favoriteMovies = user.favoriteMovies.filter( title => title !== movieTitle )
+//         res.status(200).send(`${movieTitle} has been removed from ${id}'s array.`);
+//     } else {
+//         res.status(400).send('User or movie not found.')
+//     }
+// });
+
+// Allow existing users to deregister
+app.delete('/users/:Username', async (req, res) => {
+    await Users.findOneAndDelete({ Username: req.params.Username })
+    .then((user) => {
+        if (!user) {
+            res.status(400).send(req.params.Username + ' was not found.');
+        } else {
+            res.status(200).send(req.params.Username + ' was deleted.')
+        }
+    })
+    .catch((error) => {
+        console.error(error);
+        res.status(500).send('Error: ' + error); 
+    });
 });
+
+// Old non-Mongoose DELETE route for allowing existing user to deregister
+// app.delete('/users/:id', (req, res) => {
+//     const { id } = req.params;
+
+//     let user = users.find( user => user.id == id );
+
+//     if (user) {
+//         users = users.filter( user => user.id != id )
+//         res.status(200).send(`User ${id}'s has been deleted.`);
+//     } else {
+//         res.status(400).send('User not found.')
+//     }
+// });
 
 
 
