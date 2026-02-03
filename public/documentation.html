@@ -59,7 +59,14 @@
 			<td>Allow new users to register</td>
 			<td>/users</td>
 			<td>POST</td>
-			<td>JSON object</td>
+			<td>JSON object with format:<br>
+				{<br>
+					"Username": "dansmith",<br>
+					"Password": "abcd1234",<br>
+					"Email": "dansmith@email.com",<br>
+					"Birthday": 1995/05/14<br>
+				}
+			</td>
 			<td><code>{ "name": Dan Smith, "email": "dansmith@gmail.com", "id": {uuid.v4} }</code></td>
 			<td>JSON object</td>
 		</tr>
