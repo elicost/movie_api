@@ -273,17 +273,33 @@ app.get('/movies/genre/:genreName', async (req, res) => {
 //     }
 // });
 
-// GET route for returning information about single director by name
-app.get('/movies/director/:directorName', (req, res) => {
-    const { directorName } = req.params;
-    const director = movies.find( movie => movie.director.name === directorName ).director;
-
-    if (director) {
-        res.status(200).json(director);
-    } else {
-        res.status(400).send('Director not found.')
-    }
+// Return information about single director by name (Mongoose GET route)
+app.get('/movies/director/:directorName', async (req, res) => {
+    await Movies.findOne({ 'Director.Name': req.params.directorName })
+        .then((movie) => {
+            if (movie) {
+                res.json(movie.Director);
+            } else {
+                res.status(404).send('Director not found.');
+            }
+            })
+        .catch((error) => {
+        console.error(error);
+        res.status(500).send('Error: ' + error)
+    });
 });
+
+// Old non-Mongoose GET route for returning information about single director by name
+// app.get('/movies/director/:directorName', (req, res) => {
+//     const { directorName } = req.params;
+//     const director = movies.find( movie => movie.director.name === directorName ).director;
+
+//     if (director) {
+//         res.status(200).json(director);
+//     } else {
+//         res.status(400).send('Director not found.')
+//     }
+// });
 
 // Add user (Mongoose-compatible POST request)
 
@@ -335,34 +351,91 @@ app.post('/users', async (req, res) => {
 //     }
 // });
 
-// PUT route for allowing existing users to update name
-app.put('/users/:id', (req, res) => {
-    const { id } = req.params;
-    const updatedUser = req.body;
+// Allow users to update user information (Mongoose PUT route)
 
-    let user = users.find( user => user.id == id );
+/*Expected JSON format for requests:
+{
+    ID: Integer,
+    Username: String,
+    Password: String,
+    Email: String,
+    Birthday: Date
+}*/
 
-    if (user) {
-        user.name = updatedUser.name;
-        res.status(200).json(user);
-    } else {
-        res.status(400).send('User not found.')
-    }
+app.put('/users/:Username', async (req, res) => {
+    await Users.findOneAndUpdate({ Username: req.params.Username },
+        { $set: {
+            Username: req.body.Username,
+            Password: req.body.Password,
+            Email: req.body.Email,
+            Birthday: req.body.Birthday
+        }},
+        { new: true })
+        .then((updatedUser) => {
+            if (updatedUser) {
+                res.json(updatedUser);
+            } else {
+                res.status(404).send('Username not found.');
+            }
+        })
+        .catch((error) => {
+        console.error(error);
+        res.status(500).send('Error: ' + error)
+    });
 });
 
-// POST route for allowing user to add movie to favorites list
-app.post('/users/:id/:movieTitle', (req, res) => {
-    const { id, movieTitle } = req.params;
+// Old non-Mongoose PUT route for allowing existing users to update name
+// app.put('/users/:id', (req, res) => {
+//     const { id } = req.params;
+//     const updatedUser = req.body;
 
-    let user = users.find( user => user.id == id );
+//     let user = users.find( user => user.id == id );
 
-    if (user) {
-        user.favoriteMovies.push(movieTitle);
-        res.status(200).send(`${movieTitle} has been addded to ${id}'s array.`);
-    } else {
-        res.status(400).send('User or movie not found.')
+//     if (user) {
+//         user.name = updatedUser.name;
+//         res.status(200).json(user);
+//     } else {
+//         res.status(400).send('User not found.')
+//     }
+// });
+
+// Allow user to add movie to favorites list (Mongoose POST route)
+app.post('/users/:Username/movies/:MovieID', async (req, res) => {
+    const movie = await Movies.findOne({ Title: req.params.MovieID });
+    if (!movie) {
+        res.status(404).send('Movie not found.');
     }
+    await Users.findOneAndUpdate(
+        { Username: req.params.Username },
+        { $push: { FavoriteMovies: req.params.MovieID }},
+        { new: true }
+    )
+    .then((updatedUser) => {
+        if (updatedUser) {
+            res.json(updatedUser);
+        } else {
+            res.status(404).send('Username not found.');
+        }
+    })
+    .catch((error) => {
+        console.error(error);
+        res.status(500).send('Error: ' + error)
+    })
 });
+
+// Old non-Mongoose POST route for allowing user to add movie to favorites list
+// app.post('/users/:id/:movieTitle', (req, res) => {
+//     const { id, movieTitle } = req.params;
+
+//     let user = users.find( user => user.id == id );
+
+//     if (user) {
+//         user.favoriteMovies.push(movieTitle);
+//         res.status(200).send(`${movieTitle} has been addded to ${id}'s array.`);
+//     } else {
+//         res.status(400).send('User or movie not found.')
+//     }
+// });
 
 // DELETE route for allowing user to delete movie from favorites list
 app.delete('/users/:id/:movieTitle', (req, res) => {
