@@ -20,9 +20,40 @@
 			<th>REQUEST BODY FORMAT</th>
 			<th>REQUEST BODY EXAMPLE</th>
 			<th>RESPONSE BODY FORMAT</th>
+			<th>RESPONSE BODY EXAMPLE</th>
 		</tr>
 	</thead>
 	<tbody>
+		<tr>
+			<td>Return data about a single movie by title</td>
+			<td>/movies/:Title</td>
+			<td>GET</td>
+			<td>N/A</td>
+			<td>N/A</td>
+			<td>JSON object</td>
+			<td><pre>
+			[
+				{
+					"Genre": {
+						"Name": "Name of genre",
+						"Description": "Description of genre."
+					},
+					"Director": {
+						"Name": "Name of director",
+						"Bio": "Director bio.",
+						"Birth": "XXXX-XX-XXT00:00:00.000Z",
+						"Death": "XXXX-XX-XXT00:00:00.000Z"
+					},
+					"_id": "xxxxxxxxxxxxxxxxxxxxxxxx",
+					"Title": "Title of movie",
+					"Description": "Description of movie.",
+					"Actors": [ "Names of actors" ],
+					"ImageUrl": "https://www.movieposter/this_movie.jpg",
+					"Featured": true/false
+				}
+			]
+			</pre></td>
+		</tr>
 		<tr>
 			<td>Return list of all movies</td>
 			<td>/movies</td>
@@ -30,14 +61,7 @@
 			<td>N/A</td>
 			<td>N/A</td>
 			<td>JSON object</td>
-		</tr>
-		<tr>
-			<td>Return data about a single movie by title</td>
-			<td>/movies/:title</td>
-			<td>GET</td>
-			<td>N/A</td>
-			<td>N/A</td>
-			<td>JSON object</td>
+			<td>See above example (format repeated)</td>
 		</tr>
 		<tr>
 			<td>Return data about a genre by name</td>
@@ -46,6 +70,12 @@
 			<td>N/A</td>
 			<td>N/A</td>
 			<td>JSON object</td>
+			<td><pre>
+				{
+					"Name": "Name of genre",
+					"Description": "Description of genre."
+				}
+			</pre></td>
 		</tr>
 		<tr>
 			<td>Return data about a director by name</td>
@@ -54,53 +84,91 @@
 			<td>N/A</td>
 			<td>N/A</td>
 			<td>JSON object</td>
+			<td><pre>
+				{
+					"Name": "Name of director",
+					"Bio": "Director bio.",
+					"Birth": "XXXX-XX-XXT00:00:00.000Z",
+					"Death": "XXXX-XX-XXT00:00:00.000Z"
+				}
+			</pre></td>
 		</tr>
 		<tr>
 			<td>Allow new users to register</td>
 			<td>/users</td>
 			<td>POST</td>
-			<td>JSON object with format:<br>
-				{<br>
-					"Username": "dansmith",<br>
-					"Password": "abcd1234",<br>
-					"Email": "dansmith@email.com",<br>
-					"Birthday": 1995/05/14<br>
-				}
-			</td>
-			<td><code>{ "name": Dan Smith, "email": "dansmith@gmail.com", "id": {uuid.v4} }</code></td>
 			<td>JSON object</td>
+			<td><code>{ "Username": "dannysmith", "Password": "abcd1234", "Email": "dannysmith@gmail.com", "Birthday": 1995/05/14 }</code></td>
+			<td>JSON object</td>
+			<td><pre>
+				{
+					"Username": "dannysmith",
+					"Password": "abcd1234",
+					"Email": "dannysmith@gmail.com",
+					"Birthday": "1995-05-14T05:00:00.000Z",
+					"FavoriteMovies": [],
+					"_id": "698145e0d08a4e523719a0bf",
+					"__v": 0
+				}
+			</pre></td>
 		</tr>
 		<tr>
-			<td>Allow a user to update their username</td>
-			<td>/users/:id</td>
+			<td>Allow a user to update their information</td>
+			<td>/users/:Username</td>
 			<td>PUT</td>
-			<td>N/A</td>
-			<td>N/A</td>
-			<td>text</td>
+			<td>JSON object</td>
+			<td><code>{ "Email": "dannysmith1@gmail.com" }</code></td>
+			<td>JSON object</td>
+			<td><pre>
+				{
+					"Username": "dannysmith",
+					"Password": "abcd1234",
+					"Email": "dannysmith1@gmail.com",
+					"Birthday": "1995-05-14T05:00:00.000Z",
+					"FavoriteMovies": [],
+					"_id": "698145e0d08a4e523719a0bf",
+					"__v": 0
+				}
+			</pre></td>
 		</tr>
 		<tr>
 			<td>Allow user to add movie to their favorites list</td>
-			<td>/users/:id/:movieTitle</td>
+			<td>/users/:Username/movies/:movieID</td>
 			<td>POST</td>
+			<td>N/A</td>
+			<td>N/A</td>
 			<td>JSON object</td>
-			<td><code>{ "title": "Taxi Driver", "director": "Martin Scorcese", "genre": "Drama", "description": "A mentally unstable veteran works as a nighttime taxi driver in New York City, where the perceived decadence and sleaze fuels his urge for violent action." }</code></td>
-			<td>text</td>
+			<td><pre>
+				{
+					"Username": "dannysmith",
+					"Password": "abcd1234",
+					"Email": "dannysmith1@gmail.com",
+					"Birthday": "1995-05-14T05:00:00.000Z",
+					"FavoriteMovies": [
+						"697a744d53fdc51195ad5f24"
+					],
+					"_id": "698145e0d08a4e523719a0bf",
+					"__v": 0
+				}
+			</pre></td>
 		</tr>
 		<tr>
 			<td>Allow user to remove movie from their favorites list</td>
-			<td>/users/:id/:movieTitle</td>
+			<td>/users/:Username/movies/:movieID</td>
 			<td>DELETE</td>
+			<td>N/A</td>
+			<td>N/A</td>
 			<td>JSON object</td>
-			<td><code>{ "title": "Avatar", "director": "James Cameron", "genre": "Fantasy", "description": "A paraplegic Marine dispatched to the moon Pandora on a unique mission becomes torn between following his orders and protecting the world he feels is his home." }</code></td>
-			<td>text</td>
+			<td>See above example (film removed from "FavoriteMovies" array when request successful)</td>
 		</tr>
 		<tr>
 			<td>Allow existing users to deregister</td>
-			<td>/users/:id</td>
+			<td>/users/:Username</td>
 			<td>DELETE</td>
-			<td>JSON object</td>
-			<td><code>{ "name": James Kirk, "email": "captainkirk@starfleet.org", "id": {uuid.v4} }</code></td>
+			<td>N/A</td>
+			<td>N/A</code></td>
 			<td>text</td>
+			<td><pre>dannysmith was deleted.</pre></td>
 		</tr>
 	</tbody>
     </table>
