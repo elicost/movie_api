@@ -8,7 +8,7 @@ const express = require('express'),
 const Movies = Models.Movie;
 const Users = Models.User;
 
-mongoose.connect('mongodb://localhost27017/cfDB');
+mongoose.connect('mongodb://localhost:27017/cfDB');
 
 const app = express();
 
