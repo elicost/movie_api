@@ -20,6 +20,7 @@ app.use(express.urlencoded({ extended: true}));
 
 const port = 8080;
 
+// Placeholder user information
 let users = [
     {
         id: 1,
