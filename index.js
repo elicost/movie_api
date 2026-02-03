@@ -241,17 +241,33 @@ app.get('/movies/:Title', async (req, res) => {
 //     }
 // });
 
-// GET route for returning information about single genre by name
-app.get('/movies/genre/:genreName', (req, res) => {
-    const { genreName } = req.params;
-    const genre = movies.find( movie => movie.genre.name === genreName ).genre;
-
-    if (genre) {
-        res.status(200).json(genre);
-    } else {
-        res.status(400).send('Genre not found.')
-    }
+// Return information about single genre by name (Mongoose GET route)
+app.get('/movies/genre/:genreName', async (req, res) => {
+    await Movies.findOne({ 'Genre.Name': req.params.genreName })
+        .then((movie) => {
+            if (movie) {
+                res.json(movie.Genre);
+            } else {
+                res.status(404).send('Genre not found.');
+            }
+            })
+        .catch((error) => {
+        console.error(error);
+        res.status(500).send('Error: ' + error)
+    });
 });
+
+// Old non-Mongoose GET route for returning information about single genre by name
+// app.get('/movies/genre/:genreName', (req, res) => {
+//     const { genreName } = req.params;
+//     const genre = movies.find( movie => movie.genre.name === genreName ).genre;
+
+//     if (genre) {
+//         res.status(200).json(genre);
+//     } else {
+//         res.status(400).send('Genre not found.')
+//     }
+// });
 
 // GET route for returning information about single director by name
 app.get('/movies/director/:directorName', (req, res) => {
