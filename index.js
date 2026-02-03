@@ -8,10 +8,7 @@ const express = require('express'),
 const Movies = Models.Movie;
 const Users = Models.User;
 
-mongoose.connect('mongodb://localhost:27017/cfDB', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-});
+mongoose.connect('mongodb://localhost27017/cfDB');
 
 const app = express();
 
@@ -245,7 +242,7 @@ app.get('/movies/director/:directorName', (req, res) => {
 
 // Add user (Mongoose-compatible POST request)
 
-/*Expected JSON format:
+/*Expected JSON format for requests:
 {
     ID: Integer,
     Username: String,
