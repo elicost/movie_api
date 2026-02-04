@@ -428,7 +428,10 @@ app.post('/users/:Username/movies/:MovieID', passport.authenticate('jwt', { sess
 // });
 
 // Allow users to remove movie from list of favorites (Mongoose DELETE route)
-app.delete('/users/:Username/movies/:MovieID', async (req, res) => {
+app.delete('/users/:Username/movies/:MovieID', passport.authenticate('jwt', { session: false }), async (req, res) => {
+    if(req.user.Username !== req.params.Username){
+        return res.status(400).send('Permission denied.');
+    }
     const movie = await Movies.findById(req.params.MovieID);
     if (!movie) {
         return res.status(404).send('Movie not found.');
@@ -466,7 +469,10 @@ app.delete('/users/:Username/movies/:MovieID', async (req, res) => {
 // });
 
 // Allow existing users to deregister
-app.delete('/users/:Username', async (req, res) => {
+app.delete('/users/:Username', passport.authenticate('jwt', { session: false }), async (req, res) => {
+    if(req.user.Username !== req.params.Username){
+        return res.status(400).send('Permission denied.');
+    }
     await Users.findOneAndDelete({ Username: req.params.Username })
     .then((user) => {
         if (!user) {
