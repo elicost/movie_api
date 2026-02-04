@@ -250,7 +250,7 @@ app.get('/movies/:Title', passport.authenticate('jwt', { session: false}), async
 // });
 
 // Return information about single genre by name (Mongoose GET route)
-app.get('/movies/genre/:genreName', async (req, res) => {
+app.get('/movies/genre/:genreName', passport.authenticate('jwt', { session: false }), async (req, res) => {
     await Movies.findOne({ 'Genre.Name': req.params.genreName })
         .then((movie) => {
             if (movie) {
