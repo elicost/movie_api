@@ -306,16 +306,6 @@ app.get('/movies/director/:directorName', passport.authenticate('jwt', { session
 // });
 
 // Add user (Mongoose-compatible POST request)
-
-/*Expected JSON format for requests:
-{
-    ID: Integer,
-    Username: String,
-    Password: String,
-    Email: String,
-    Birthday: Date
-}*/
-
 app.post('/users', async (req, res) => {
     await Users.findOne({ Username: req.body.Username })
         .then((user) => {
@@ -356,17 +346,7 @@ app.post('/users', async (req, res) => {
 // });
 
 // Allow users to update user information (Mongoose PUT route)
-
-/*Expected JSON format for requests:
-{
-    ID: Integer,
-    Username: String,
-    Password: String,
-    Email: String,
-    Birthday: Date
-}*/
-
-app.put('/users/:Username', async (req, res) => {
+app.put('/users/:Username', passport.authenticate('jwt', { session: false }), async (req, res) => {
     if(req.user.Username !== req.params.Username){
         return res.status(400).send('Permission denied.');
     }
@@ -407,7 +387,10 @@ app.put('/users/:Username', async (req, res) => {
 // });
 
 // Allow user to add movie to favorites list (Mongoose POST route)
-app.post('/users/:Username/movies/:MovieID', async (req, res) => {
+app.post('/users/:Username/movies/:MovieID', passport.authenticate('jwt', { session: false }), async (req, res) => {
+    if(req.user.Username !== req.params.Username){
+        return res.status(400).send('Permission denied.');
+    }
     const movie = await Movies.findById(req.params.MovieID);
     if (!movie) {
         return res.status(404).send('Movie not found.');
