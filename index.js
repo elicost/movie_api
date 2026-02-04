@@ -222,7 +222,7 @@ app.get('/movies', passport.authenticate('jwt', { session: false }), async (req,
 // });
 
 // Return information about single movie by title (Mongoose GET route)
-app.get('/movies/:Title', async (req, res) => {
+app.get('/movies/:Title', passport.authenticate('jwt', { session: false}), async (req, res) => {
     await Movies.findOne({ Title: req.params.Title })
         .then((movie) => {
             if (movie) {
