@@ -546,10 +546,30 @@ app.delete('/users/:Username/movies/:MovieID', passport.authenticate('jwt', { se
 // });
 
 // Allow existing users to deregister
-app.delete('/users/:Username', passport.authenticate('jwt', { session: false }), async (req, res) => {
-    if(req.user.Username !== req.params.Username){
-        return res.status(400).send('Permission denied.');
-    }
+app.delete('/users/:Username',
+    [
+        check('Password', 'Password is required to delete user.').not().isEmpty()
+    ],
+    passport.authenticate('jwt', { session: false }),
+    async (req, res) => {
+        let errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(422).json({ errors: errors.array() });
+        }
+
+        if (req.user.Username !== req.params.Username){
+            return res.status(400).send('Permission denied.');
+        }
+
+        const user = await Users.findOne({ Username: req.params.Username });
+        if (!user) {
+            return res.status(404).send('User not found.');
+        }
+
+        if (!user.validatePassword(req.body.Password)) {
+            return res.status(401).send('Password is incorrect.');
+        }
+
     await Users.findOneAndDelete({ Username: req.params.Username })
     .then((user) => {
         if (!user) {
