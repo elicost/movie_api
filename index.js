@@ -329,7 +329,7 @@ app.post('/users',
         check('Password', 'Password is required.').not().isEmpty(),
         check('Email', 'Email does not appear to be valid.').isEmail()
     ], async (req, res) => {
-        
+
     let errors = validationResult(req);
 
     if (!errors.isEmpty()) {
@@ -374,6 +374,31 @@ app.post('/users',
 //         res.status(400).send('New user creation missing name.')
 //     }
 // });
+
+// Allow users to update *birthday ONLY* without re-entry of login details
+app.put('/users/:Username/profile', passport.authenticate('jwt', { session: false }),
+    async (req, res) => {
+        if(req.user.Username !== req.params.Username){
+            return res.status(400).send('Permission denied.');
+        }
+
+        await Users.findOneAndUpdate({ Username: req.params.Username },
+            { $set: {
+                Birthday: req.body.Birthday
+            }},
+            { new: true })
+            .then((updatedUser) => {
+                if (updatedUser) {
+                    res.json(updatedUser);
+                } else {
+                    res.status(404).send('Username not found.');
+                }
+            })
+            .catch((error) => {
+                console.error(error);
+                res.status(500).send('Error: ' + error)
+            });
+    });
 
 // Allow users to update user information (Mongoose PUT route)
 app.put('/users/:Username', passport.authenticate('jwt', { session: false }), async (req, res) => {
