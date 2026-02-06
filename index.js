@@ -1,3 +1,4 @@
+// Variable declarations
 const express = require('express'),
     morgan = require('morgan'),
     mongoose = require('mongoose'),
@@ -5,7 +6,7 @@ const express = require('express'),
 
 const { check, validationResult } = require('express-validator');
 
-    const Movies = Models.Movie;
+const Movies = Models.Movie;
 const Users = Models.User;
 
 mongoose.connect('mongodb://localhost:27017/cfDB');
@@ -33,9 +34,6 @@ app.use(cors());
 let auth = require('./auth')(app);
 const passport = require('passport');
 require('./passport');
-
-const port = 8080;
-
 
 // MIDDLEWARE
 app.use(morgan('common')); // Invoke Morgan logger
@@ -307,6 +305,8 @@ app.use((err, req, res, next) => {
     res.status(500).send('Something isn\'t working right!');
 });
 
-app.listen(port, () => {
-    console.log(`Listening on port ${port}`);
+// Port designation
+const port = process.env.PORT || 8080;
+app.listen(port, '0.0.0.0', () => {
+    console.log('Listening on Port ' + port);
 });
