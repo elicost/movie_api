@@ -154,39 +154,15 @@ app.post('/users',
 });
 
 
-// Allow users to update *birthday ONLY* without re-entry of login details (Mongoose PUT route)
-app.put('/users/:Username/profile', passport.authenticate('jwt', { session: false }),
-    async (req, res) => {
-        if(req.user.Username !== req.params.Username){
-            return res.status(400).send('Permission denied.');
-        }
-
-        await Users.findOneAndUpdate({ Username: req.params.Username },
-            { $set: {
-                Birthday: req.body.Birthday
-            }},
-            { new: true })
-            .then((updatedUser) => {
-                if (updatedUser) {
-                    res.json(updatedUser);
-                } else {
-                    res.status(404).send('Username not found.');
-                }
-            })
-            .catch((error) => {
-                console.error(error);
-                res.status(500).send('Error: ' + error)
-            });
-    });
-
-// Allow users to update secure info *only* with re-entry of login details (Mongoose PUT route)
-app.put('/users/:Username/security',
+// Allow users to update account info *only* with password re-check & JWT (Mongoose PUT route)
+app.put('/users/:Username',
     [
-        check('CurrentPassword', 'Current password is required.').not().isEmpty(),
+        check('Password', 'Password is required.').not().isEmpty(),
         check('Username', 'Username must be at least 5 characters.').optional().isLength({min: 5}),
         check('Username', 'Username contains non alphanumeric characters - not allowed.').optional().isAlphanumeric(),
         check('NewPassword', 'New password must be at least 5 characters.').optional().isLength({min: 5}),
-        check('Email', 'Email does not appear to be valid.').optional().isEmail()
+        check('Email', 'Email does not appear to be valid.').optional().isEmail(),
+        check('Birthday', 'Birthday must be a valid date.').optional().isISO8601()
     ],
     passport.authenticate('jwt', { session: false }),
     async (req, res) => {
@@ -204,14 +180,15 @@ app.put('/users/:Username/security',
             return res.status(404).send('User not found.');
         }
 
-        if (!user.validatePassword(req.body.CurrentPassword)) {
-            return res.status(401).send('Current password is incorrect.');
+        if (!user.validatePassword(req.body.Password)) {
+            return res.status(401).send('Password is incorrect.');
         }
 
         let updateFields = {};
         if (req.body.Username) updateFields.Username = req.body.Username;
         if (req.body.Email) updateFields.Email = req.body.Email;
         if (req.body.NewPassword) updateFields.Password = Users.hashPassword(req.body.NewPassword);
+        if (req.body.Birthday) updateFields.Birthday = req.body.Birthday;
 
         await Users.findOneAndUpdate(
             { Username: req.params.Username },
@@ -228,7 +205,7 @@ app.put('/users/:Username/security',
 });
 
 
-// Allow user to add movie to favorites list (Mongoose POST route)
+// Allow user to add movie to favorites list with JWT verification (Mongoose POST route)
 app.post('/users/:Username/movies/:MovieID', passport.authenticate('jwt', { session: false }), async (req, res) => {
     if(req.user.Username !== req.params.Username){
         return res.status(400).send('Permission denied.');
@@ -256,7 +233,7 @@ app.post('/users/:Username/movies/:MovieID', passport.authenticate('jwt', { sess
 });
 
 
-// Allow users to remove movie from list of favorites (Mongoose DELETE route)
+// Allow users to remove movie from list of favorites with JWT verification (Mongoose DELETE route)
 app.delete('/users/:Username/movies/:MovieID', passport.authenticate('jwt', { session: false }), async (req, res) => {
     if(req.user.Username !== req.params.Username){
         return res.status(400).send('Permission denied.');
