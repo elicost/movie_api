@@ -52,11 +52,12 @@ app.get('/', (req, res) => {
 
 // GET route for testing server connection
 app.get('/test-env', (req, res) => {
-      res.json({
-          hasConnectionUri: !!process.env.CONNECTION_URI,
-          uriStart: process.env.CONNECTION_URI ? process.env.CONNECTION_URI.substring(0, 30) + '...' : 'NOT SET'
-      });
-  });
+    res.json({
+        hasConnectionUri: !!process.env.CONNECTION_URI,
+        hasJwtSecret: !!process.env.JWT_SECRET,
+        jwtSecretPreview: process.env.JWT_SECRET ? process.env.JWT_SECRET.substring(0, 5) + '...' : 'NOT SET'
+    });
+});
 
 // Return list of all movies (Mongoose GET route)
 app.get('/movies', passport.authenticate('jwt', { session: false }), async (req, res) => {
