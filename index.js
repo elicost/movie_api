@@ -1,3 +1,6 @@
+//Environment variable handling
+require('dotenv').config();
+
 // Variable declarations
 const express = require('express'),
     morgan = require('morgan'),
