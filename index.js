@@ -50,14 +50,6 @@ app.get('/', (req, res) => {
     res.send('Welcome to my Movie API!');
 });
 
-// GET route for testing server connection
-app.get('/test-env', (req, res) => {
-    res.json({
-        hasConnectionUri: !!process.env.CONNECTION_URI,
-        hasJwtSecret: !!process.env.JWT_SECRET,
-        jwtSecretPreview: process.env.JWT_SECRET ? process.env.JWT_SECRET.substring(0, 5) + '...' : 'NOT SET'
-    });
-});
 
 // Return list of all movies (Mongoose GET route)
 app.get('/movies', passport.authenticate('jwt', { session: false }), async (req, res) => {
