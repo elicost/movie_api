@@ -10,13 +10,14 @@
 
 <body>
     <h1>Movie API</h1>
-    <p>This document will be updated throughout the course of this project.</p>
+    <p>REST API for querying movie data and managing user accounts.<br>Note endpoint authentication requirements when testing.</p>
     <table>
 	<thead>
 		<tr>
 			<th>REQUEST</th>
 			<th>URL/PATH</th>
 			<th>HTTP METHOD</th>
+			<th>AUTHENTICATION</th>
 			<th>REQUEST BODY FORMAT</th>
 			<th>REQUEST BODY EXAMPLE</th>
 			<th>RESPONSE BODY FORMAT</th>
@@ -25,39 +26,56 @@
 	</thead>
 	<tbody>
 		<tr>
+			<td>Login & acquire JWT</td>
+			<td>/login</td>
+			<td>POST</td>
+			<td>None required</td>
+			<td>JSON object</td>
+			<td><code>{ "Username": "dannysmith", "Password": "abcd1234" }</code></td>
+			<td>JSON object</td>
+			<td><pre>
+		{
+			"user": { ... },
+			"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6..."
+		}
+			</pre></td>
+		</tr>
+		<tr>
 			<td>Return data about a single movie by title</td>
 			<td>/movies/:Title</td>
 			<td>GET</td>
+			<td>JWT required</td>
 			<td>N/A</td>
 			<td>N/A</td>
 			<td>JSON object</td>
 			<td><pre>
-			[
-				{
-					"Genre": {
-						"Name": "Name of genre",
-						"Description": "Description of genre."
-					},
-					"Director": {
-						"Name": "Name of director",
-						"Bio": "Director bio.",
-						"Birth": "XXXX-XX-XXT00:00:00.000Z",
-						"Death": "XXXX-XX-XXT00:00:00.000Z"
-					},
-					"_id": "xxxxxxxxxxxxxxxxxxxxxxxx",
-					"Title": "Title of movie",
-					"Description": "Description of movie.",
-					"Actors": [ "Names of actors" ],
-					"ImageUrl": "https://www.movieposter/this_movie.jpg",
-					"Featured": true/false
-				}
-			]
+		[
+			{
+				"Genre": {
+					"Name": "Name of genre",
+					"Description": "Description of genre."
+				},
+				"Director": {
+					"Name": "Name of director",
+					"Bio": "Director bio.",
+					"Birth": "XXXX-XX-XXT00:00:00.000Z",
+					"Death": "XXXX-XX-XXT00:00:00.000Z"
+				},
+				"_id": "xxxxxxxxxxxxxxxxxxxxxxxx",
+				"Title": "Title of movie",
+				"Description": "Description of movie.",
+				"Actors": [ "Names of actors" ],
+				"ImageUrl": "https://www.movieposter/this_movie.jpg",
+				"Featured": true/false
+			}
+		]
 			</pre></td>
 		</tr>
 		<tr>
 			<td>Return list of all movies</td>
 			<td>/movies</td>
 			<td>GET</td>
+			<td>JWT required</td>
 			<td>N/A</td>
 			<td>N/A</td>
 			<td>JSON object</td>
@@ -67,95 +85,107 @@
 			<td>Return data about a genre by name</td>
 			<td>/movies/genre/:genreName</td>
 			<td>GET</td>
+			<td>JWT required</td>
 			<td>N/A</td>
 			<td>N/A</td>
 			<td>JSON object</td>
 			<td><pre>
-				{
-					"Name": "Name of genre",
-					"Description": "Description of genre."
-				}
+		{
+			"Name": "Name of genre",
+			"Description": "Description of genre."
+		}
 			</pre></td>
 		</tr>
 		<tr>
 			<td>Return data about a director by name</td>
 			<td>/movies/director/:directorName</td>
 			<td>GET</td>
+			<td>JWT required</td>
 			<td>N/A</td>
 			<td>N/A</td>
 			<td>JSON object</td>
 			<td><pre>
-				{
-					"Name": "Name of director",
-					"Bio": "Director bio.",
-					"Birth": "XXXX-XX-XXT00:00:00.000Z",
-					"Death": "XXXX-XX-XXT00:00:00.000Z"
-				}
+		{
+			"Name": "Name of director",
+			"Bio": "Director bio.",
+			"Birth": "XXXX-XX-XXT00:00:00.000Z",
+			"Death": "XXXX-XX-XXT00:00:00.000Z"
+		}
 			</pre></td>
 		</tr>
 		<tr>
 			<td>Allow new users to register</td>
 			<td>/users</td>
 			<td>POST</td>
+			<td>None required</td>
 			<td>JSON object</td>
 			<td><code>{ "Username": "dannysmith", "Password": "abcd1234", "Email": "dannysmith@gmail.com", "Birthday": 1995/05/14 }</code></td>
 			<td>JSON object</td>
 			<td><pre>
-				{
-					"Username": "dannysmith",
-					"Password": "abcd1234",
-					"Email": "dannysmith@gmail.com",
-					"Birthday": "1995-05-14T05:00:00.000Z",
-					"FavoriteMovies": [],
-					"_id": "698145e0d08a4e523719a0bf",
-					"__v": 0
-				}
+		{
+			"Username": "dannysmith",
+			"Password": "abcd1234",
+			"Email": "dannysmith@gmail.com",
+			"Birthday": "1995-05-14T05:00:00.000Z",
+			"FavoriteMovies": [],
+			"_id": "698145e0d08a4e523719a0bf",
+			"__v": 0
+		}
+
+		// Note that passwords are hashed in production
 			</pre></td>
 		</tr>
 		<tr>
 			<td>Allow a user to update their information</td>
 			<td>/users/:Username</td>
 			<td>PUT</td>
+			<td>JWT and password required</td>
 			<td>JSON object</td>
-			<td><code>{ "Email": "dannysmith1@gmail.com" }</code></td>
+			<td><code>{ "Password": "abcd1234", "Email": "danielsmith@mail.com" }</code></td>
 			<td>JSON object</td>
 			<td><pre>
-				{
-					"Username": "dannysmith",
-					"Password": "abcd1234",
-					"Email": "dannysmith1@gmail.com",
-					"Birthday": "1995-05-14T05:00:00.000Z",
-					"FavoriteMovies": [],
-					"_id": "698145e0d08a4e523719a0bf",
-					"__v": 0
-				}
+		{
+			"Username": "dannysmith",
+			"Password": "abcd1234",
+			"Email": "danielsmith@gmail.com",
+			"Birthday": "1995-05-14T05:00:00.000Z",
+			"FavoriteMovies": [],
+			"_id": "698145e0d08a4e523719a0bf",
+			"__v": 0
+		}
+
+		// Note that passwords are hashed in production
 			</pre></td>
 		</tr>
 		<tr>
 			<td>Allow user to add movie to their favorites list</td>
 			<td>/users/:Username/movies/:movieID</td>
 			<td>POST</td>
+			<td>JWT required</td>
 			<td>N/A</td>
 			<td>N/A</td>
 			<td>JSON object</td>
 			<td><pre>
-				{
-					"Username": "dannysmith",
-					"Password": "abcd1234",
-					"Email": "dannysmith1@gmail.com",
-					"Birthday": "1995-05-14T05:00:00.000Z",
-					"FavoriteMovies": [
-						"697a744d53fdc51195ad5f24"
-					],
-					"_id": "698145e0d08a4e523719a0bf",
-					"__v": 0
-				}
+		{
+			"Username": "dannysmith",
+			"Password": "abcd1234",
+			"Email": "dannysmith1@gmail.com",
+			"Birthday": "1995-05-14T05:00:00.000Z",
+			"FavoriteMovies": [
+				"697a744d53fdc51195ad5f24"
+			],
+			"_id": "698145e0d08a4e523719a0bf",
+			"__v": 0
+		}
+
+		// Note that passwords are hashed in production
 			</pre></td>
 		</tr>
 		<tr>
 			<td>Allow user to remove movie from their favorites list</td>
 			<td>/users/:Username/movies/:movieID</td>
 			<td>DELETE</td>
+			<td>JWT required</td>
 			<td>N/A</td>
 			<td>N/A</td>
 			<td>JSON object</td>
@@ -165,8 +195,9 @@
 			<td>Allow existing users to deregister</td>
 			<td>/users/:Username</td>
 			<td>DELETE</td>
-			<td>N/A</td>
-			<td>N/A</code></td>
+			<td>JWT and password required</td>
+			<td>JSON object</td>
+			<td>{ "Password": "abcd1234" }</td>
 			<td>text</td>
 			<td><pre>dannysmith was deleted.</pre></td>
 		</tr>
