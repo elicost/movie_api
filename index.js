@@ -47,6 +47,14 @@ app.get('/', (req, res) => {
     res.send('Welcome to my Movie API!');
 });
 
+// *TEMPORARY* connection test route
+app.get('/test-env', (req, res) => {
+      res.json({
+          hasConnectionUri: !!process.env.CONNECTION_URI,
+          uriStart: process.env.CONNECTION_URI ? process.env.CONNECTION_URI.substring(0, 30) + '...' : 'NOT SET'
+      });
+  });
+
 // Return list of all movies (Mongoose GET route)
 app.get('/movies', passport.authenticate('jwt', { session: false }), async (req, res) => {
     await Movies.find()
