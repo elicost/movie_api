@@ -85,4 +85,4 @@ API documentation available at: https://movieapi-virid.vercel.app/documentation.
 
 
 
-README.md produced using Claude Code
+README.md template produced using Claude Code and verified by developer.
