@@ -12,7 +12,10 @@ const { check, validationResult } = require('express-validator');
 const Movies = Models.Movie;
 const Users = Models.User;
 
-mongoose.connect(process.env.CONNECTION_URI);
+mongoose.connect(process.env.CONNECTION_URI, {
+    serverSelectionTimeoutMS: 30000,
+    socketTimeoutMS: 45000
+});
 
 const app = express();
 
@@ -47,7 +50,7 @@ app.get('/', (req, res) => {
     res.send('Welcome to my Movie API!');
 });
 
-// *TEMPORARY* connection test route
+// GET route for testing server connection
 app.get('/test-env', (req, res) => {
       res.json({
           hasConnectionUri: !!process.env.CONNECTION_URI,
